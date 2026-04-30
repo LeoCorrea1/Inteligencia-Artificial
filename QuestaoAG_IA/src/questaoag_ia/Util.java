@@ -3,13 +3,13 @@ package questaoag_ia;
 import java.util.Random;
 
 /**
- * Classe que contém as letras do alfabeto no atributo letras. Além do método de gerarPalavra()
+ * Classe que contém as letras do alfabeto no atributo letras (minúsculas e sem acento). Além do método de gerarPalavra()
  * @author alexandrezamberlan
  */
 public class Util {
 
     /**
-     * Atributo de classe que armazena todos os números das cidades
+     * Atributo de classe que armazena todos as letras do alfabeto (minúsculas e sem acento)
      */
     public static String letras = "123456789";
     /**
