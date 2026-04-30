@@ -55,7 +55,7 @@ public class AG {
         Cromossomo selecionado;
 
         int qtdSelecionados = taxaSelecao * populacao.size() / 100;
-        novaPopulacao.add(populacao.get(0)); // elitismo
+        novaPopulacao.add(populacao.get(0)); 
         
         Random gerador = new Random();
         int i = 1;
@@ -67,8 +67,8 @@ public class AG {
             torneio.add(c1);
             torneio.add(c2);
             torneio.add(c3);
-            ordenar(torneio); // o primeiro é o com menor penalidade
-
+            ordenar(torneio);//o primeiro é o mais apto
+            
             selecionado = torneio.get(0);
             if (!novaPopulacao.contains(selecionado)) { 
                 novaPopulacao.add(selecionado);
