@@ -8,12 +8,12 @@ import java.util.List;
  */
 public class Cromossomo implements Comparable<Cromossomo> {
 
-    /**
-     * atributo que armazena a rota de cidades
+  /**
+     * atributo que armazena uma palavra qualquer gerada aleatoriamente
      */
     StringBuffer valor; 
     /**
-     * variável que armazena o fitness de um estado. Aqui, quanto menor, melhor (menos restrições)
+     * variável que armazena o fitness de um estado/cromossomo/indivíduo. Quanto maior seu valor, mais próxima da solução
      */
     int aptidao;
     /**
@@ -22,9 +22,9 @@ public class Cromossomo implements Comparable<Cromossomo> {
     int porcentagemAptidao; 
 
     /**
-     * Construtor que recebe um valor/palavra qualquer e a palavra final, calculando o fitness desse indivíduo
-     * @param valor rota gerada
-     * @param estadoFinal rota desejada (ex: "123456789")
+     * Construtor que recebe um valor/palavra qualquer e a palavra final, calculando o fitness desse indivíduo (valor/palavra)
+     * @param valor palavra ou valor ou estado ou indivíduo
+     * @param estadoFinal palavra ou valor ou indivíduo que se deseja gerar
      */
     public Cromossomo(StringBuffer valor, String estadoFinal) {
         this.valor = valor;
@@ -32,8 +32,8 @@ public class Cromossomo implements Comparable<Cromossomo> {
     }
 
     /**
-     * Método que recebe um estado/indivíduo e retorna sua aptidão baseada em restrições
-     * @param estadoFinal rota que se deseja gerar
+     * Método que recebe um estado/indivíduo e retorna sua aptidão, ou seja, quão próximo o estado está da solução
+     * @param estadoFinal palavra ou valor ou indivíduo que se deseja gerar
      * @return o valor da aptidao do estado
      */
     int calcularAptidao(String estadoFinal) {
@@ -59,9 +59,9 @@ public class Cromossomo implements Comparable<Cromossomo> {
     }
 
     /**
-     * Método sobreescrito para ser utilizado na ordenação (Crescente pois nota menor é melhor)
-     * @param cromossomo representa o indivíduo
-     * @return -1 se está ordenado
+     * Método sobreescrito para ser utilizado na ordenação, em que o critério da ordenação (decrescente) é a aptidao
+     * @param cromossomo representa o indivíduo, aqui, uma palavra
+     * @return -1 se está ordenado decrescente
      */
     @Override
     public int compareTo(Cromossomo cromossomo) {
@@ -73,6 +73,13 @@ public class Cromossomo implements Comparable<Cromossomo> {
         return 1;
     }
 
+    /**
+     * Método sobreescrito para ser utilizado no método add de uma lista, garantindo que só objetos tipo Cromossomo seja
+     * inseridos na lista, tendo como referência o atributo valor que representa a palavra/indivíduo
+     * @param o objeto inserido na lista
+     * @return true se o objeto inserido na lista é do tipo Cromossomo
+     */  
+    
     @Override
     public boolean equals(Object o) {
         if (o instanceof Cromossomo) {
