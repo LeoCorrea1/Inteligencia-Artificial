@@ -11,7 +11,7 @@ import java.util.Collections;
  * @author alexandrezamberlan
  */
 public class AG {
-    
+
     /**
      * Método de classe que gera a 1a população totalmente aleatória
      * @param populacao lista para os indivíduos gerados
@@ -26,10 +26,10 @@ public class AG {
 
     /**
      * Método de classe que ordena uma lista contendo Cromossomos/Estados/Indivíduos
-     * @param populacao 
+     * @param populacao
      */
     static void ordenar(List<Cromossomo> populacao) {
-        Collections.sort(populacao); 
+        Collections.sort(populacao);
     }
 
     /**
@@ -38,8 +38,8 @@ public class AG {
      */
     static void exibir(List<Cromossomo> populacao){
         for (int i = 0; i < populacao.size(); i++) {
-            System.out.println("Rota: " + populacao.get(i).valor + 
-                               " - Penalidade: " + populacao.get(i).aptidao);
+            System.out.println("Rota: " + populacao.get(i).valor +
+                    " - Penalidade: " + populacao.get(i).aptidao);
         }
     }
 
@@ -50,13 +50,13 @@ public class AG {
      * @param taxaSelecao porcentagem de quantos serão selecionados
      */
     static void selecionarPorTorneio(List<Cromossomo> populacao, List<Cromossomo> novaPopulacao, int taxaSelecao) {
-        Cromossomo c1, c2, c3; 
+        Cromossomo c1, c2, c3;
         List<Cromossomo> torneio = new ArrayList<Cromossomo>();
         Cromossomo selecionado;
 
         int qtdSelecionados = taxaSelecao * populacao.size() / 100;
-        novaPopulacao.add(populacao.get(0)); 
-        
+        novaPopulacao.add(populacao.get(0));
+
         Random gerador = new Random();
         int i = 1;
         do {
@@ -68,13 +68,13 @@ public class AG {
             torneio.add(c2);
             torneio.add(c3);
             ordenar(torneio);//o primeiro é o mais apto
-            
+
             selecionado = torneio.get(0);
-            if (!novaPopulacao.contains(selecionado)) { 
+            if (!novaPopulacao.contains(selecionado)) {
                 novaPopulacao.add(selecionado);
                 i++;
             }
-            torneio.clear(); 
+            torneio.clear();
         } while (i < qtdSelecionados);
     }
 
@@ -89,7 +89,7 @@ public class AG {
         String sPai, sMae, sFilho1, sFilho2;
         Random gerador = new Random();
         Cromossomo pai, mae;
-        
+
         int qtdReproduzidos = taxaReproducao * populacao.size() / 100;
 
         int i = 0;
@@ -99,7 +99,7 @@ public class AG {
 
             sPai = pai.valor.toString();
             sMae = mae.valor.toString();
-            
+
             sFilho1 = sPai.substring(0, sPai.length() / 2) + sMae.substring(sMae.length() / 2);
             sFilho2 = sMae.substring(0, sMae.length() / 2) + sPai.substring(sPai.length() / 2);
 
@@ -107,7 +107,7 @@ public class AG {
             novaPopulacao.add(new Cromossomo(new StringBuffer(sFilho2), estadoFinal));
             i = i + 2;
         } while (i < qtdReproduzidos);
-        
+
         while(novaPopulacao.size() > populacao.size()) {
             novaPopulacao.remove(novaPopulacao.size() - 1);
         }
@@ -120,27 +120,27 @@ public class AG {
      */
     public static void mutar(List<Cromossomo> populacao, String estadoFinal) {
         Random gerador = new Random();
-        int qtdMutantes = gerador.nextInt(populacao.size() / 5 + 1); 
+        int qtdMutantes = gerador.nextInt(populacao.size() / 5 + 1);
         int posicaoMutante;
 
         for (; qtdMutantes > 0; qtdMutantes--) {
             posicaoMutante = gerador.nextInt(populacao.size());
             Cromossomo mutante = populacao.get(posicaoMutante);
-            
+
             char[] genes = mutante.valor.toString().toCharArray();
             genes[gerador.nextInt(genes.length)] = Util.letras.charAt(gerador.nextInt(Util.tamanho));
-            
+
             populacao.set(posicaoMutante, new Cromossomo(new StringBuffer(new String(genes)), estadoFinal));
         }
     }
 
     public static void main(String[] args) {
-        int tamanhoPopulacao = 20;
+        int tamanhoPopulacao = 500;
         String estadoFinal = "123456789";
         int taxaSelecao = 30;
         int taxaReproducao = 100 - taxaSelecao;
         int taxaMutacao = 10;
-        int qtdGeracoes = 100;
+        int qtdGeracoes = 500;
 
         List<Cromossomo> populacao = new ArrayList<>();
         List<Cromossomo> novaPopulacao = new ArrayList<>();
@@ -151,17 +151,20 @@ public class AG {
         for (int i = 0; i < qtdGeracoes; i++) {
             selecionarPorTorneio(populacao, novaPopulacao, taxaSelecao);
             reproduzir(populacao, novaPopulacao, taxaReproducao, estadoFinal);
-            
+
+            String statusMutacao = "";
             if (i % 5 == 0) {
                 mutar(novaPopulacao, estadoFinal);
+                statusMutacao = " [MUTação aplicada]";
             }
-            
+
             populacao.clear();
             populacao.addAll(novaPopulacao);
             novaPopulacao.clear();
             ordenar(populacao);
 
-            System.out.println("Geracao " + (i + 1) + " Melhor: " + populacao.get(0).valor + " (" + populacao.get(0).aptidao + ")");
+            System.out.println("Geracao " + (i + 1) + " Melhor: " + populacao.get(0).valor + " (" + populacao.get(0).aptidao + ")" + statusMutacao);
+
             if(populacao.get(0).aptidao == 0) break;
         }
     }
