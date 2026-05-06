@@ -1,6 +1,7 @@
 package questaoag_ia;
 
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Classe que representa um estado ou indivíduo de um problema para o AG
@@ -40,19 +41,26 @@ public class Cromossomo implements Comparable<Cromossomo> {
         int nota = 0;
         String s = this.valor.toString();
 
-        for (int i = 0; i < s.length(); i++) {
-            for (int j = i + 1; j < s.length(); j++) {
-                if (s.charAt(i) > s.charAt(j)) {
-                    nota += 10;
-                }
+        for (int i = 0; i < s.length() - 1; i++) {
+            if (s.charAt(i) > s.charAt(i + 1)) {
+                nota += 10;
             }
         }
 
+        List<Character> analisados = new ArrayList<>();
         for (int i = 0; i < s.length(); i++) {
-            for (int j = i + 1; j < s.length(); j++) {
-                if (s.charAt(i) == s.charAt(j)) {
+            char cidade = s.charAt(i);
+            if (!analisados.contains(cidade)) {
+                int ocorrencias = 0;
+                for (int j = 0; j < s.length(); j++) {
+                    if (cidade == s.charAt(j)) {
+                        ocorrencias++;
+                    }
+                }
+                if (ocorrencias > 1) {
                     nota += 20;
                 }
+                analisados.add(cidade);
             }
         }
         return nota;
