@@ -12,7 +12,7 @@ class Perceptron:
 		self.geracoes = geracoes
 		self.limiar = limiar
 		self.n_amostras = len(amostras) # número de linhas (amostras)
-		self.n_atributos = len(amostras) # número de colunas (atributos)
+		self.n_atributos = len(amostras[0])# número de colunas (atributos)
 		self.pesos = []
 
  
@@ -22,13 +22,16 @@ class Perceptron:
 		# Ex.: [[0.72, 0.82], ...] vira [[1, 0.72, 0.82], ...]
 		for amostra in self.amostras:
 			amostra.insert(0, self.limiar)
+
 		# Gerar valores aleatórios entre 0 e 1 (pesos) conforme o número de atributos
 		# a lista de pesos tem tamanho da quantidade de atributos de uma amostra
-		for i in range(self.n_atributos + 1):
+		for i in range(self.n_atributos):
 			self.pesos.append(random.random())
+		
 		# Inserir o valor do limiar na posição "0" do vetor de pesos
 		# Ex.: [0.8, 0.1] vira [1, 0.8, 0.1]
 		self.pesos.insert(0, self.limiar)
+
 		# Inicializar contador de gerações
 		geracoes = 0
 		while True:
@@ -42,8 +45,10 @@ class Perceptron:
 				for j in range(self.n_atributos + 1):
 					# Multiplicar amostra e seu peso e também somar com o potencial que já tinha
 					soma += self.pesos[j] * self.amostras[i][j]
+
 				# Obter a saída da rede considerando a função sinal
 				saida_gerada = self.funcao_ativacao_signal(soma)
+
 				# Verificar se a saída da rede é diferente da saída desejada
 				# se sim, calibrar ou treinar ou ajustar ou fazer aprender
 				if saida_gerada != self.saidas[i]:
@@ -55,15 +60,17 @@ class Perceptron:
 					
 					# se entrou no if é porque ainda não aprendeu
 					aprendeu = False
+
 			geracoes += 1
 			if aprendeu or geracoes > self.geracoes:
 				print('Quantidade de gerações para aprender: %d\n' % geracoes)
 				print('Pesos: ', self.pesos)
 				break
  
+ 
 	## Testes para "novas" amostras
 	def teste(self, amostra):
-		print('Peso', self.pesos) ## fazer em arquivo
+		print('Pesos: ', self.pesos)
 		# Inserir o valor do limiar na posição "0" para cada amostra da lista "amostras"
 		amostra.insert(0, self.limiar)
 		# Inicializar potencial de ativação
@@ -72,24 +79,25 @@ class Perceptron:
 		for i in range(self.n_atributos + 1):
 			# Multiplicar amostra e seu peso e também somar com o potencial que já tinha
 			soma += self.pesos[i] * amostra[i]
+			
 		# Obter a saída da rede considerando g a função funcao_ativacao_signal
 		saida_gerada = self.funcao_ativacao_signal(soma)
 
 		if saida_gerada == 1:
-			print('Classe: %d. CHUVA' % saida_gerada)
+			print('Classe: %d. Chuva' % saida_gerada)
 		else:
-			print('Classe: %d. SOL' % saida_gerada)
+			print('Classe: %d. Sol' % saida_gerada)
  
 	## Função funcao_ativacao_signal
 	def funcao_ativacao_signal(self, soma):
 		if soma >= 0:
 			return 1
 		return -1
-
+	
 amostras = []
 saidas = []
 
-with open('c:/Users/laboratorio/Downloads/tecnicasIA-master/tecnicasIA-master/5 - RNA/Python/TrabalhoLeonardo/chuvaSol.csv', 'r') as arquivo:
+with open('TrabalhoLeonardo/chuvaSol.csv', 'r') as arquivo:
 		leitor_csv = csv.reader(arquivo)
 		for linha in leitor_csv:
 			amostra = [float(linha[0]), float(linha[1])] 
